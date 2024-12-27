@@ -2,30 +2,6 @@ version: '3'
 
 services:
 
-#  event-db:
-#    image: mongo:latest
-#    container_name: event-db
-#    restart: always
-#    networks:
-#      - hotmart
-#    environment:
-#      - MONGO_INITDB_ROOT_USERNAME=admin
-#      - MONGO_INITDB_ROOT_PASSWORD=123456
-#    ports:
-#      - 27017:27017
-
-#  inventory-db:
-#    image: postgres:latest
-#    container_name: inventory-db
-#    networks:
-#      - hotmart
-#    environment:
-#      - POSTGRES_DB=inventory-db
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=postgres
-#    ports:
-#      - 5434:5432
-
   kafka:
     container_name: kafka
     image: obsidiandynamics/kafka
@@ -64,25 +40,6 @@ services:
           brokers: ["kafka:29092"]
     depends_on:
       - "kafka"
-
-
-#  inventory-service:
-#    build: ./inventory-service
-#    container_name: inventory-service
-#    depends_on:
-#      - inventory-db
-#      - kafka
-#    networks:
-#      - hotmart
-#    environment:
-#      - KAFKA_BROKER=kafka:29092
-#      - DB_HOST=inventory-db
-#      - DB_PORT=5432
-#      - DB_NAME=inventory-db
-#      - DB_USERNAME=postgres
-#      - DB_PASSWORD=postgres
-#    ports:
-#      - 8092:8092
 
 networks:
   hotmart:
