@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<body>
+<section class="sec-auth">
+    <div class="information">
+        <div class="texts">
+            <img th:src="@{/img/logo.svg}" alt="logo"/>
+            <h1 class="title">Nunca foi tão fácil transformar o que você sabe em um negócio digital.</h1>
+            <p class="subtitle" th:utext="${subtitle != null ? #strings.replace(subtitle, '{BREAK}', '<br/>') : 'Vamos te ajudar desde os primeiros passos.'}"></p>
+        </div>
+        <div class="image"></div>
+    </div>
+    <div th:classappend="${errorDesc == null} ? 'form-login' : 'form-error'">
+        <div layout:fragment="page"></div>
+    </div>
+</section>
+
+<div th:if="${error}" class="error-alert" id="error-message">
+    <p th:text="${error}"></p>
+</div>
+<div th:if="${param.error}" class="error-alert" id="error-login">
+    <p>Usuário ou senha inválidos.</p>
+</div>
+<script>
+    setTimeout(function () {
+        let errorMessage = document.getElementById("error-message");
+        let errorLogin = document.getElementById("error-login");
+
+        if (errorMessage) {
+            errorMessage.style.display = "none";
+        }
+
+        if (errorLogin) {
+            errorLogin.style.display = "none";
+        }
+    }, 6000);
+</script>
+</body>
+<!--Configurações do Login-->
+<script th:if="${page == 'login'}" th:src="@{/js/login.js}"></script>
+<script th:if="${page == 'login'}" type="module" th:src="@{/js/moduleLogin.js}"></script>
+<!--Configurações do Signup-->
+<script th:if="${page == 'signup'}" th:src="@{/js/signup.js}"></script>
+<script th:if="${page == 'signup'}" type="module" th:src="@{/js/moduleSignup.js}"></script>
+<!--Configurações do Recovery-->
+<script th:if="${page == 'recovery'}" type="module" th:src="@{/js/moduleRecovery.js}"></script>
+<!--Configurações do Change Password-->
+<script th:if="${page == 'changePassword'}" th:src="@{/js/changePassword.js}"></script>
+<script th:if="${page == 'changePassword'}" type="module" th:src="@{/js/moduleChangePassword.js}"></script>
+</html>

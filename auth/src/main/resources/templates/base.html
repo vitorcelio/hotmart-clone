@@ -1,0 +1,49 @@
+<head th:fragment="head">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="${title} + ' - Hotmart'"></title>
+    <link rel="icon" type="image/x-icon" th:href="@{/img/favicon.ico}"/>
+    <link rel="stylesheet" th:href="@{/css/main.min.css}"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@24,400,1,0"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap"
+            rel="stylesheet"
+    />
+</head>
+
+<footer th:fragment="info-company">
+    <div class="info-company">
+        <a href="">Suporte</a>
+        <hr/>
+        <a href="">Termos de Uso</a>
+        <hr/>
+        <a href="">Política de Privacidade</a>
+    </div>
+</footer>
+
+<div th:fragment="separator(text)" class="separator">
+    <hr/>
+    <mark th:text="${text}"></mark>
+    <hr/>
+</div>
+
+<a th:fragment="back" th:href="@{${link}}" class="btn-back">
+    <span class="material-symbols-outlined"> arrow_back </span>
+    <small th:text="${text}"></small>
+</a>
+
+<div th:fragment="btn-auth" class="btn-auth-group">
+    <button th:if="${facebook != null ? facebook : true}" class="btn-auth" type="button">
+        <i class="icon-facebook"></i>
+    </button>
+    <button th:if="${apple != null ? apple : true}" class="btn-auth" type="button">
+        <i class="icon-apple"></i>
+    </button>
+    <button th:if="${google != null ? google : true}" class="btn-auth" type="button">
+        <i class="icon-google"></i>
+    </button>
+</div>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hotmart</title>
+  </head>
+  <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f6f6f6">
+    <table cellspacing="0" cellpadding="0" border="0" width="100%">
+      <tbody>
+        <tr>
+          <td>
+            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+              <tbody>
+                <tr>
+                  <td align="center" valign="top" width="100%" bgcolor="#053d4e">
+                    <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px">
+                      <tbody>
+                        <tr>
+                          <td align="center" valign="top" style="padding: 60px 0 60px 0">
+                            <img
+                              src="https://ci3.googleusercontent.com/meips/ADKq_NZuv8sp7BGFkdeCVWT3eCfxYR8yzuMT-6ckCkwYVlg3rl3PrdrNnGJx2D57ym7ZzGh9wLWn4587zwVH-aQWzISRKEjFmxYW9-CNN5rapZpGbYn72Vo=s0-d-e1-ft#https://static.hotmart.com/emails-hotmart/img/hotmart-color.png"
+                              width="150"
+                              height="53"
+                              border="0"
+                              style="display: block"
+                              class="CToWUd"
+                              data-bit="iit"
+                            />
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td height="100%" valign="top" width="100%" bgcolor="#f6f6f6" style="background: #f6f6f6; padding: 0 20px 0 20px">
+            <table cellspacing="0" cellpadding="0" border="0" width="100%" align="center" style="max-width: 600px">
+              <tbody>
+                <tr>
+                  <td height="100%" valign="top" width="100%" bgcolor="#ffffff" style="padding: 36px 36px 36px 36px; background: #ffffff">
+                    <p
+                      style="
+                        color: #6d6f71;
+                        margin: 24px 0 24px 0;
+                        font-family: Open Sans, Helvetica, Arial, sans-serif;
+                        font-size: 16px;
+                        text-align: left;
+                        line-height: 1.44;
+                        display: block;
+                        font-weight: normal;
+                      "
+                    >
+                      Olá, <strong th:text="${name}"></strong>.
+                    </p>
+                    <p
+                      style="
+                        color: #6d6f71;
+                        margin: 24px 0 24px 0;
+                        font-family: Open Sans, Helvetica, Arial, sans-serif;
+                        font-size: 16px;
+                        text-align: left;
+                        line-height: 1.44;
+                        display: block;
+                        font-weight: normal;
+                      "
+                    >
+                      Foi aberta uma <strong>solicitação de acesso a dados</strong> referente a sua conta Hotmart.
+                    </p>
+                    <p
+                      style="
+                        color: #6d6f71;
+                        margin: 24px 0 24px 0;
+                        font-family: Open Sans, Helvetica, Arial, sans-serif;
+                        font-size: 16px;
+                        text-align: left;
+                        line-height: 1.44;
+                        display: block;
+                        font-weight: normal;
+                      "
+                    >
+                      Para ter acesso aos dados, basta clicar no botão abaixo. Lembrando que o link expira em 2 horas a partir do envio deste e-mail.
+                    </p>
+                    <table border="0" cellspacing="0" cellpadding="0" align="center" style="width: auto">
+                      <tbody>
+                        <tr>
+                          <td align="center" style="padding: 0 0 24px 0">
+                            <table border="0" cellspacing="0" cellpadding="0" style="width: auto">
+                              <tbody>
+                                <tr>
+                                  <td align="center" style="border-radius: 50em; background-color: #00ce81">
+                                    <a
+                                      th:href="'http://localhost:8080/dataAccess/download?uuid=' + ${uuid}"
+                                      style="
+                                        font-size: 16px;
+                                        font-family: Open Sans, Helvetica, Arial, sans-serif;
+                                        color: #ffffff;
+                                        text-decoration: none !important;
+                                        border-radius: 50em;
+                                        background-color: #00ce81;
+                                        padding: 20px 25px 20px 25px;
+                                        border: 1px solid #00915c;
+                                        display: block;
+                                        font-weight: bold;
+                                      "
+                                      target="_blank"
+                                      >Acessar meus dados pessoais</a
+                                    >
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <p
+                      style="
+                        color: #6d6f71;
+                        margin: 24px 0 24px 0;
+                        font-family: Open Sans, Helvetica, Arial, sans-serif;
+                        font-size: 16px;
+                        text-align: left;
+                        line-height: 1.44;
+                        display: block;
+                        font-weight: normal;
+                      "
+                    >
+                      Saiba mais sobre a nossa
+                      <a
+                        href="#"
+                        target="_blank"
+                        >Política de Privacidade</a
+                      >.
+                    </p>
+                    <p
+                      style="
+                        color: #6d6f71;
+                        margin: 24px 0 24px 0;
+                        font-family: Open Sans, Helvetica, Arial, sans-serif;
+                        font-size: 16px;
+                        text-align: left;
+                        line-height: 1.44;
+                        display: block;
+                        font-weight: normal;
+                      "
+                    >
+                      E se você não fez esta solicitação, ou se acredita que outra pessoa tenha acessado sua conta, entre em contato com nosso
+                      <a
+                        href="#"
+                        target="_blank"
+                        >Suporte</a
+                      >
+                      imediatamente.
+                    </p>
+                    <p
+                      style="
+                        color: #6d6f71;
+                        margin: 24px 0 24px 0;
+                        font-family: Open Sans, Helvetica, Arial, sans-serif;
+                        font-size: 16px;
+                        text-align: left;
+                        line-height: 1.44;
+                        display: block;
+                        font-weight: normal;
+                      "
+                    >
+                      Abraços,
+                    </p>
+                    <p
+                      style="
+                        color: #6d6f71;
+                        margin: 24px 0 24px 0;
+                        font-family: Open Sans, Helvetica, Arial, sans-serif;
+                        font-size: 16px;
+                        text-align: left;
+                        line-height: 1.44;
+                        display: block;
+                        font-weight: normal;
+                      "
+                    >
+                      Equipe Hotmart.
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td height="100%" valign="top" width="100%" bgcolor="#ffffff" style="padding: 0px 36px 0px 36px; background: #ffffff"></td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="">
+              <tbody>
+                <tr>
+                  <td align="center" valign="top" width="100%">
+                    <table cellspacing="0" cellpadding="0" border="0" width="100%" align="center" bgcolor="" style="max-width: 600px">
+                      <tbody>
+                        <tr>
+                          <td align="center" valign="top" style="padding: 40px 0 40px 0">
+                            <img
+                              src="https://ci3.googleusercontent.com/meips/ADKq_NZba6jnKgUBSMCqsWAUtQQNsuCEy2MVnd-ej8ZOcJeoy6IKTGt8o1qw8I2iTNW-HaD_T7AqOZY3xVDWIpsSg7KKKbXmd-RlhWzV2KKGRDEmxtzqXg=s0-d-e1-ft#https://static.hotmart.com/emails-hotmart/img/hotmart-gray.png"
+                              width="100"
+                              height="35"
+                              border="0"
+                              style="display: block"
+                              class="CToWUd"
+                              data-bit="iit"
+                            />
+                          </td>
+                        </tr>
+                        <tr>
+                          <td align="left" height="100%" valign="top" width="100%" style="padding: 20px">
+                            <p
+                              style="
+                                color: #999999;
+                                margin: 0px 0 20px 0;
+                                font-family: Open Sans, Helvetica, Arial, sans-serif;
+                                font-size: 12px;
+                                text-align: center;
+                                line-height: 1.44;
+                                display: block;
+                                font-weight: normal;
+                              "
+                            >
+                              Não responda a este e-mail. Em caso de dúvidas, entre em contato com o nosso
+                              <a
+                                href="#"
+                                target="_blank"
+                              >
+                                suporte</a
+                              >.
+                            </p>
+                            <p
+                              style="
+                                color: #999999;
+                                margin: 0px 0 20px 0;
+                                font-family: Open Sans, Helvetica, Arial, sans-serif;
+                                font-size: 12px;
+                                text-align: center;
+                                line-height: 1.44;
+                                display: block;
+                                font-weight: normal;
+                              "
+                            >
+                              Para maiores informações sobre sua conta,
+                              <a
+                                href="#"
+                                target="_blank"
+                                >acesse a plataforma</a
+                              >.
+                            </p>
+                            <p
+                              style="
+                                color: #999999;
+                                margin: 0px 0 20px 0;
+                                font-family: Open Sans, Helvetica, Arial, sans-serif;
+                                font-size: 12px;
+                                text-align: center;
+                                line-height: 1.44;
+                                display: block;
+                                font-weight: normal;
+                              "
+                            >
+                              Para acessar os termos de Compra,
+                              <a
+                                href="#"
+                                target="_blank"
+                                >clique aqui.</a
+                              >
+                            </p>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <img
+      alt=""
+      src="https://ci3.googleusercontent.com/meips/ADKq_NYAo5AtiDt4v9OHWh6_Y4v98b0i5TQOQQ1DYcTwlNGfIRzCNYz8wJ7HYcNOFk0AQFQeXmA-eEQwvWSyoSDxddBhJBQUvrvNdDi7OBD-iirem3b5h3l2R0ZWY133uOaMQkHFjAcNdMqvhcpxexeEyzpmT3W4l0AvWHfP1VVht1AIkXYw0KHngOXwVXQZDMFF12hk2VZI5Enwmto-Xv8sxg=s0-d-e1-ft#https://rnpf31dg.r.us-east-1.awstrack.me/I0/010001936bf1bf27-25d0268b-c47f-4feb-8316-222b26efbe31-000000/uIkaSqrjVCwHLzQEXYwkt8yiR5c=402"
+      style="display: none; width: 1px; height: 1px"
+      class="CToWUd"
+      data-bit="iit"
+    />
+    <div class="yj6qo"></div>
+    <div class="adL"></div>
+  </body>
+</html>

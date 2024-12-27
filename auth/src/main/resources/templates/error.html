@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-br" layout:decorate="~{template}"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head th:replace="~{base :: head(title='Erro Inesperado')}"></head>
+
+  <body>
+      <div layout:fragment="page">
+        <img class="logo" th:src="@{/img/logo.svg}" alt="logo" />
+        
+        <div class="error">
+          <h2>Não conseguimos processar sua requisição</h2>
+          <p>Ocorreu um erro ao tentar concluir sua solicitação. <strong>Por favor, entre em contato com o nosso suporte ou tente novamente.</strong></p>
+          <hr class="separator-simple" />
+          <p th:text="${errorDesc}"></p>
+        </div>
+        <footer th:replace="~{base :: info-company}"></footer>
+      </div>
+  </body>
+</html>

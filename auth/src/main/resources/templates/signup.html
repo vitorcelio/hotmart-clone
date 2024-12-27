@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br" layout:decorate="~{template}"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head th:replace="~{base :: head(title='Sign-up')}"></head>
+
+<body>
+<form method="post" th:object="${userRequestDTO}" th:action="@{/login/signup}" class="form" layout:fragment="page">
+    <header>
+        <img class="logo" th:src="@{/img/logo.svg}" alt="logo"/>
+        <h2 class="title-header">CADASTRO</h2>
+        <div th:replace="~{base :: btn-auth(facebook=false)}"></div>
+    </header>
+    <div th:replace="~{base :: separator('Ou crie sua conta com o e-mail')}"></div>
+    <main data-controller="signup">
+        <div class="form-field">
+            <div class="field">
+                <label class="label-form" for="name">Nome</label>
+                <div class="input-form" id="name-input">
+                    <input th:field="*{name}" type="text" id="name" placeholder="Seu nome completo" data-signup-target="name"
+                           data-action="keyup->signup#nameAction"/>
+                </div>
+                <small id="error-name" class="error-text hidden">Nome completo é obrigatório</small>
+                <small class="error-text" th:errors="*{name}"></small>
+            </div>
+
+            <div class="field">
+                <label class="label-form" for="email">Email</label>
+                <div class="input-form" id="email-input">
+                    <input th:field="*{email}" type="text" id="email" placeholder="Seu email principal" data-signup-target="email"
+                           data-action="keyup->signup#emailAction"/>
+                </div>
+                <small id="error-email" class="error-text hidden">Email é obrigatório</small>
+                <small class="error-text" th:errors="*{email}"></small>
+            </div>
+
+            <div class="field">
+                <label class="label-form" for="senha">Senha</label>
+                <div class="input-form" id="password-input">
+                    <input th:field="*{password}"
+                            type="password"
+                            id="senha"
+                            maxlength="20"
+                            placeholder="Insira uma senha"
+                            data-signup-target="password"
+                            data-action="keyup->signup#passwordAction"
+                    />
+                    <span id="icon-input" class="material-symbols-outlined"> visibility </span>
+                </div>
+                <small id="error-password" class="error-text hidden">Senha é obrigatória</small>
+                <small class="error-text" th:errors="*{password}"></small>
+            </div>
+        </div>
+
+        <div class="terms-of-use">
+            <small id="error-terms" class="error-text hidden">Aceite os Termos de Uso da Hotmart para continuar</small>
+            <div class="checkbox-form">
+                <input type="checkbox" name="profile" id="terms" value="SELLER" data-signup-target="terms"
+                       data-action="click->signup#termsAction"/>
+
+                <label for="terms" id="terms-seller" data-action="click->signup#termsAction">
+                    Ao clicar aqui, (i) concordo com os <a href="">Termos de Uso</a> e <a href="">Políticas,</a>(ii),
+                    tenho ciência da
+                    <a href="">Política de privacidade</a> da Hotmart e (iii) declaro ser maior de idade de acordo com a
+                    legislação aplicável.
+                </label>
+
+                <label for="terms" id="terms-buyer" class="hidden" data-action="click->signup#termsAction">
+                    Ao clicar aqui, declaro que (i) li e concordo com os <a href="">Termos de Uso</a> e demais <a
+                        href="">Políticas da Hotmart</a> e (ii) tenho
+                    ciência da <a href=""> Política de privacidade </a>.
+                </label>
+            </div>
+        </div>
+
+        <label class="label-form">O que você busca na Hotmart?</label>
+        <div class="btn-create-group">
+            <div class="btn-create-account-group" id="create-account-group">
+                <input th:field="*{role}" type="radio" name="typeAccount" id="seller" value="SELLER"/>
+                <label for="seller" class="btn-create-account active">Vender Produtos</label>
+                <input th:field="*{role}" type="radio" name="typeAccount" id="buyer" value="BUYER"/>
+                <label for="buyer" class="btn-create-account">Comprar Produtos</label>
+            </div>
+        </div>
+        <button type="submit" class="btn-form signup">Cadastre-se agora</button>
+        <h3 class="create-account-button"><span>Já possui uma conta?</span> <a th:href="@{/login}">Faça Log in</a></h3>
+    </main>
+    <footer th:replace="~{base :: info-company}"></footer>
+</form>
+</body>
+
+</html>

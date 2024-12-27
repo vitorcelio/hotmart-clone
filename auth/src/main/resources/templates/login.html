@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br" layout:decorate="~{template}"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head th:replace="~{base :: head(title='Login')}"></head>
+
+<body>
+<form method="post" th:action="@{/login}" class="form" layout:fragment="page">
+    <header>
+        <img class="logo" th:src="@{/img/logo.svg}" alt=""/>
+        <h2 class="title-header">ENTRAR</h2>
+        <p class="subtitle-header">Faça login com sua conta social ou insira suas informações abaixo.</p>
+        <div th:replace="~{base :: btn-auth}"></div>
+    </header>
+    <hr class="separator-simple"/>
+    <main>
+        <div class="form-field" data-controller="login">
+            <div class="field">
+                <label class="label-form" for="email">Email</label>
+                <div class="input-form" id="email-input">
+
+                    <input name="username"
+                           type="text"
+                           id="email"
+                           placeholder="Seu email ou usuário"
+                           data-login-target="email"
+                           data-action="keyup->login#emailAction"/>
+
+                </div>
+                <small id="error-email" class="error-text hidden">Email é obrigatório</small>
+            </div>
+
+            <div class="field">
+                <label class="label-form" for="senha">Senha</label>
+                <div class="input-form" id="password-input">
+
+                    <input name="password"
+                           type="password"
+                           id="senha"
+                           maxlength="20"
+                           placeholder="Sua senha"
+                           data-login-target="password"
+                           data-action="keyup->login#passwordAction"/>
+
+                    <span id="icon-input" class="material-symbols-outlined"> visibility </span>
+                </div>
+                <small id="error-password" class="error-text hidden">Senha é obrigatória</small>
+            </div>
+        </div>
+        <a th:href="@{/login/recovery}" class="reset-password">Esqueci minha senha</a>
+        <button class="btn-form">Entrar</button>
+        <h3 class="create-account-button"><span>Não tem uma conta?</span> <a th:href="@{/login/signup}">Criar aqui</a></h3>
+    </main>
+    <footer th:replace="~{base :: info-company}"></footer>
+</form>
+</body>
+
+</html>

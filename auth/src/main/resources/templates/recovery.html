@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br" layout:decorate="~{template}"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head th:replace="~{base :: head(title='Recuperação de Senha')}"></head>
+
+<body>
+<form method="post" th:object="${recoveryPasswordRequestDTO}" th:action="@{/login/recovery}" class="form" layout:fragment="page">
+    <header class="recovery">
+        <img class="logo" th:src="@{/img/logo.svg}" alt="logo"/>
+        <a th:replace="~{base :: back(link='/login', text='Voltar')}"></a>
+        <hr class="separator-simple"/>
+        <h2 class="title-header">RECUPERAR MINHA SENHA</h2>
+        <p class="subtitle-header">Preencha abaixo seu endereço de email para receber as instruções necessárias e criar
+            uma nova senha na Hotmart.</p>
+    </header>
+    <main>
+        <div class="form-field" data-controller="passwordRecovery">
+            <div class="field">
+                <div class="input-form" id="email-input">
+                    <input th:field="*{email}"
+                            type="text"
+                            id="email"
+                            placeholder="Seu email"
+                            data-passwordRecovery-target="email"
+                            data-action="keyup->passwordRecovery#emailAction"
+                    />
+                </div>
+                <small id="error-email" class="error-text hidden">Email é obrigatório</small>
+                <small class="error-text" th:errors="*{email}"></small>
+            </div>
+        </div>
+        <button class="btn-form signup">Recuperar minha senha</button>
+    </main>
+    <footer th:replace="~{base :: info-company}"></footer>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-br" layout:decorate="~{template}"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head th:replace="~{base :: head(title='Recuperação de Senha')}"></head>
+
+<body>
+
+
+<div class="form" layout:fragment="page">
+    <header>
+        <img class="logo" th:src="@{/img/logo.svg}" alt="logo"/>
+        <a th:replace="~{base :: back(link='/login/recovery', text='Voltar')}"></a>
+        <hr class="separator-simple"/>
+        <h2 class="title-header">VERIFIQUE SEU EMAIL</h2>
+        <p class="subtitle-header">
+            Em breve, você receberá um e-mail com as instruções para redefinir sua senha. Por favor, não demore pois sua
+            redefinição de senha pode expirar.
+        </p>
+    </header>
+    <main>
+        <a th:href="@{/login}" class="btn-form signup">Ir para o login</a>
+    </main>
+    <footer th:replace="~{base :: info-company}"></footer>
+</div>
+
+
+</body>
+</html>
