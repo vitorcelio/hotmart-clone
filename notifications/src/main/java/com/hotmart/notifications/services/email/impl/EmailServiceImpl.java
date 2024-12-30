@@ -3,8 +3,11 @@ package com.hotmart.notifications.services.email.impl;
 import com.hotmart.notifications.dto.event.AccessDataEventDTO;
 import com.hotmart.notifications.dto.event.EventDTO;
 import com.hotmart.notifications.dto.event.RecoverPasswordEventDTO;
+import com.hotmart.notifications.dto.response.NotificationsResponseDTO;
+import com.hotmart.notifications.enums.SentStatus;
 import com.hotmart.notifications.enums.TemplateType;
 import com.hotmart.notifications.services.email.EmailService;
+import com.hotmart.notifications.services.notifications.NotificationsService;
 import com.hotmart.notifications.utils.JsonUtil;
 import com.hotmart.notifications.utils.NotificationsUtils;
 import jakarta.mail.internet.MimeMessage;
@@ -26,13 +29,23 @@ public class EmailServiceImpl implements EmailService {
     private final TemplateEngine templateEngine;
     private final JsonUtil jsonUtil;
     private final NotificationsUtils notificationsUtils;
+    private final NotificationsService service;
 
     @Override
     public void execute(EventDTO event, String payload) {
-        TemplateType template = event.getTemplate();
-        switch (template) {
-            case CHANGE_PASSWORD -> sendEmailRecoverPassword(payload);
-            case DATA_ACCESS -> sendEmailDataAccess(payload);
+        NotificationsResponseDTO notification = service.save(event);
+
+        try {
+            TemplateType template = event.getTemplate();
+            switch (template) {
+                case CHANGE_PASSWORD -> sendEmailRecoverPassword(payload);
+                case DATA_ACCESS -> sendEmailDataAccess(payload);
+            }
+
+            service.viewedOrSent(notification.getId(), SentStatus.SENT);
+        } catch (Exception e) {
+            log.error("Erro ao enviar notificação via e-mail: ", e);
+            service.viewedOrSent(notification.getId(), SentStatus.FAILED);
         }
     }
 

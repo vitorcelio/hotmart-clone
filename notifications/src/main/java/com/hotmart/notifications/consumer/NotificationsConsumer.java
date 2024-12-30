@@ -20,7 +20,7 @@ public class NotificationsConsumer {
     @KafkaListener(groupId = "${spring.kafka.consumer.group-id}",
             topics = "${spring.kafka.topic.email}")
     public void consumerEmailEvent(String payload) {
-        log.info("Recebendo evento {} do tópico email", payload);
+        log.info("Recebendo evento [\n {} \n] do tópico email", payload);
         EventDTO event = jsonUtil.toEvent(payload);
 
         emailService.execute(event, payload);

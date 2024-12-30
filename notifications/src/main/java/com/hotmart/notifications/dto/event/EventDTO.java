@@ -11,7 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EventDTO {
 
+    private String eventId;
     private EventType type;
     private TemplateType template;
+    private String email;
+    private Long userId;
+    private String name;
 
 }

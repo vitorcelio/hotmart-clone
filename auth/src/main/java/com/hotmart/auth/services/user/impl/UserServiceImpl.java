@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.Set;
 import java.util.UUID;
 
@@ -161,6 +160,7 @@ public class UserServiceImpl implements UserService {
                 .eventId(Instant.now().toEpochMilli() + "_" + UUID.randomUUID())
                 .type(EMAIL)
                 .template(CHANGE_PASSWORD)
+                .userId(recoverPassword.getUser().getId())
                 .name(recoverPassword.getUser().getName())
                 .email(recoverPassword.getUser().getEmail())
                 .uuid(recoverPassword.getUser().getUuid())

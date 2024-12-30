@@ -14,7 +14,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/registeredClient")
+@RequestMapping("/api/v1/registeredClient")
 public class RegisteredClientController {
 
     private final RegisteredClientService registeredClientService;

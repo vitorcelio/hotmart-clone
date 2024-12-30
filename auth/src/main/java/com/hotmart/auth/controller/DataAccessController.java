@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.io.IOException;
 
 @Controller
-@RequestMapping("/dataAccess")
+@RequestMapping("/api/v1/dataAccess")
 @RequiredArgsConstructor
 public class DataAccessController {
 

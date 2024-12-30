@@ -19,6 +19,7 @@ public class RecoverPasswordEventDTO {
     private String eventId;
     private EventType type;
     private TemplateType template;
+    private Long userId;
     private String email;
     private String name;
 
