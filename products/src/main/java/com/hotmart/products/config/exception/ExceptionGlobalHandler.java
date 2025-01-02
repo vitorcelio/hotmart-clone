@@ -1,4 +1,4 @@
-package com.hotmart.account.config.exception;
+package com.hotmart.products.config.exception;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;

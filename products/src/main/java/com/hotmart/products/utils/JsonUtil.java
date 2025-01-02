@@ -1,4 +1,4 @@
-package com.hotmart.account.utils;
+package com.hotmart.products.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;

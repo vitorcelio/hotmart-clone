@@ -5,7 +5,7 @@ import com.hotmart.notifications.dto.event.EventDTO;
 import com.hotmart.notifications.dto.response.NotificationsResponseDTO;
 import com.hotmart.notifications.enums.SentStatus;
 import com.hotmart.notifications.models.Notifications;
-import com.hotmart.notifications.respositories.NotificationsRepository;
+import com.hotmart.notifications.repositories.NotificationsRepository;
 import com.hotmart.notifications.services.notifications.NotificationsService;
 import com.hotmart.notifications.services.security.SecurityService;
 import lombok.NonNull;
@@ -26,7 +26,10 @@ public class NotificationsServiceImpl implements NotificationsService {
     @Override
     public NotificationsResponseDTO save(@NonNull EventDTO event) {
 
+        validationEventId(event.getEventId());
+
         Notifications notifications = Notifications.builder()
+                .eventId(event.getEventId())
                 .title(event.getTemplate().getTitle())
                 .type(event.getType())
                 .template(event.getTemplate())
@@ -64,4 +67,13 @@ public class NotificationsServiceImpl implements NotificationsService {
         List<Notifications> all = repository.findByRecipientIdAndStatus(securityService.getUserId(), SentStatus.SENT);
         return NotificationsResponseDTO.convert(all);
     }
+
+    private void validationEventId(@NonNull String eventId) {
+        Notifications notification = repository.findByEventId(eventId).orElse(null);
+
+        if (notification != null) {
+            throw new ValidationException("Evento já existe no banco de dados");
+        }
+    }
+
 }

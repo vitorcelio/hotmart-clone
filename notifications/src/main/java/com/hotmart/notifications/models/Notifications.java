@@ -23,6 +23,9 @@ public class Notifications {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "event_id", nullable = false)
+    private String eventId;
+
     @Column(nullable = false)
     private String title;
 

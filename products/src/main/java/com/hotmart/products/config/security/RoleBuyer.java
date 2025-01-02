@@ -1,4 +1,4 @@
-package com.hotmart.notifications.config.security;
+package com.hotmart.products.config.security;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 

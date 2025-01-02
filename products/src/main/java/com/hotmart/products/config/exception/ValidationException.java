@@ -1,4 +1,4 @@
-package com.hotmart.account.config.exception;
+package com.hotmart.products.config.exception;
 
 public class ValidationException extends RuntimeException {
 

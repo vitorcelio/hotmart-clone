@@ -1,4 +1,4 @@
-package com.hotmart.notifications.respositories;
+package com.hotmart.notifications.repositories;
 
 import com.hotmart.notifications.enums.SentStatus;
 import com.hotmart.notifications.models.Notifications;

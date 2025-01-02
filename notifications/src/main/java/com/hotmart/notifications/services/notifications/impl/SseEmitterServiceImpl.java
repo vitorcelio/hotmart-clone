@@ -1,7 +1,9 @@
 package com.hotmart.notifications.services.notifications.impl;
 
+import com.hotmart.notifications.config.exception.ValidationException;
 import com.hotmart.notifications.dto.response.MessageNotificationResponseDTO;
 import com.hotmart.notifications.services.notifications.SseEmitterService;
+import com.hotmart.notifications.services.security.SecurityService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +22,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class SseEmitterServiceImpl implements SseEmitterService {
 
     private final Map<Long, List<SseEmitter>> userSseEmitters = new ConcurrentHashMap<>();
+    private final SecurityService securityService;
 
     @Override
     public SseEmitter subscribeToNotifications(@NonNull Long userId) {
+
+        validationCreationSubscribe(userId);
+
         SseEmitter sseEmitter = new SseEmitter();
         initializeSseEmitters(userId, sseEmitter);
 
@@ -65,5 +71,17 @@ public class SseEmitterServiceImpl implements SseEmitterService {
     private void initializeSseEmitters(@NonNull Long userId, @NonNull SseEmitter sseEmitter) {
         userSseEmitters.computeIfAbsent(userId, id -> new CopyOnWriteArrayList<>()).add(sseEmitter);
         log.info("Usuário [{}] inscrito para receber notificações", userId);
+    }
+
+    private void validationCreationSubscribe(@NonNull Long userId) {
+
+        if (securityService.getUserId() == null) {
+            throw new ValidationException("Usuário não autenticado!");
+        }
+
+        if (!securityService.getUserId().equals(userId)) {
+            throw new ValidationException("Usuário sem permissão!");
+        }
+
     }
 }

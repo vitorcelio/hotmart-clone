@@ -1,4 +1,4 @@
-package com.hotmart.account.producer;
+package com.hotmart.products.producer;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
