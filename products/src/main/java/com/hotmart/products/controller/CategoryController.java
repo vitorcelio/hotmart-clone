@@ -19,13 +19,13 @@ public class CategoryController {
 
     private final CategoryService service;
 
-//    @RoleAdmin
+    @RoleAdmin
     @PostMapping
     public ResponseEntity<CategoryResponseDTO> save(@Validated @RequestBody CategoryRequestDTO request) {
         return new ResponseEntity<>(service.save(request), HttpStatus.CREATED);
     }
 
-//    @RoleAdmin
+    @RoleAdmin
     @PutMapping("/{id}")
     public ResponseEntity<CategoryResponseDTO> update(@PathVariable("id") Integer id, @Validated @RequestBody CategoryRequestDTO request) {
         return new ResponseEntity<>(service.update(id, request), HttpStatus.OK);
@@ -41,7 +41,7 @@ public class CategoryController {
         return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
 
-//    @RoleAdmin
+    @RoleAdmin
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
         service.delete(id);

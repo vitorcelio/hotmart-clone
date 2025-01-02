@@ -17,12 +17,10 @@ public class CategoryResponseDTO {
 
     private Integer id;
     private String name;
-    private String description;
 
     public CategoryResponseDTO(Category category) {
         this.id = category.getId();
         this.name = category.getName();
-        this.description = category.getDescription();
     }
 
     public static List<CategoryResponseDTO> convert(List<Category> categories) {

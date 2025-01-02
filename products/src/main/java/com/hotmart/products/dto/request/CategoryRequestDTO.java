@@ -13,12 +13,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CategoryRequestDTO {
 
-    @NotBlank(message = "O nome é obrigatório.")
+    @NotBlank(message = "O nome é obrigatório")
     @Size(min = 3, max = 50, message = "O nome deve ter entre 3 e 50 caracteres")
     private String name;
-
-    @NotBlank(message = "A descrição é obrigatória.")
-    @Size(min = 3, max = 200)
-    private String description;
 
 }

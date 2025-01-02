@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
-    @Query("SELECT c FROM Category c WHERE c.name LIKE %:name%")
+    @Query("SELECT c FROM Category c WHERE LOWER(c.name) LIKE LOWER(CONCAT('%', :name, '%'))")
     List<Category> findAllByName(@Param("name") String name);
 
     Optional<Category> findByName(String name);

@@ -27,15 +27,14 @@ public class CategoryServiceImpl implements CategoryService {
 
         Category category = Category.builder()
                 .name(request.getName())
-                .description(request.getDescription())
                 .build();
 
         Category save = repository.save(category);
+        log.info("Category {} saved", save.getName());
 
         return CategoryResponseDTO.builder()
                 .id(save.getId())
                 .name(save.getName())
-                .description(save.getDescription())
                 .build();
     }
 
@@ -46,13 +45,12 @@ public class CategoryServiceImpl implements CategoryService {
         validationNameCategory(request.getName(), id);
 
         category.setName(request.getName());
-        category.setDescription(request.getDescription());
         Category save = repository.save(category);
+        log.info("Category {} updated", save.getName());
 
         return CategoryResponseDTO.builder()
                 .id(save.getId())
                 .name(save.getName())
-                .description(save.getDescription())
                 .build();
     }
 
@@ -72,6 +70,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryResponseDTO findById(@NonNull Integer id) {
         Category category = repository.findById(id).orElseThrow(() -> new ValidationException("Categoria não encontrada."));
+        log.info("Category {} found", category.getName());
         return new CategoryResponseDTO(category);
     }
 
@@ -79,6 +78,7 @@ public class CategoryServiceImpl implements CategoryService {
     public void delete(@NonNull Integer id) {
         Category category = repository.findById(id).orElseThrow(() -> new ValidationException("Categoria não encontrada."));
         repository.delete(category);
+        log.info("Category {} deleted", category.getName());
     }
 
     private void validationNameCategory(@NonNull String name, Integer id) {

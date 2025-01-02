@@ -21,7 +21,4 @@ public class Category {
     @Column(length = 50, nullable = false, unique = true)
     private String name;
 
-    @Column(length = 200, nullable = false)
-    private String description;
-
 }
