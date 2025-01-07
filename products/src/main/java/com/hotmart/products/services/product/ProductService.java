@@ -18,10 +18,16 @@ public interface ProductService {
 
     List<ProductResponseDTO> findAll(String name, Integer categoryId);
 
+    List<ProductResponseDTO> findAllBuyerProducts();
+
+    List<ProductResponseDTO> findAllAffiliateProducts();
+
     PlanResponseDTO updatePlan(@NonNull Long id, @NonNull PlanRequestDTO request);
 
     void delete(@NonNull Long id);
 
     void deletePlan(@NonNull Long id);
+
+    List<ProductResponseDTO> findAllProductsAffiliateRequest();
 
 }

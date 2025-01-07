@@ -2,7 +2,9 @@ package com.hotmart.account.models;
 
 import com.hotmart.account.models.pk.UserRolePk;
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "users_roles")
 @IdClass(UserRolePk.class)

@@ -27,6 +27,15 @@ public class KafkaConfig {
     @Value("${spring.kafka.topic.email}")
     private String emailTopic;
 
+    @Value("${spring.kafka.topic.orchestrator}")
+    private String orchestratorTopic;
+
+    @Value("${spring.kafka.topic.product-success}")
+    private String productSuccessTopic;
+
+    @Value("${spring.kafka.topic.product-fail}")
+    private String productFailTopic;
+
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
         return new DefaultKafkaConsumerFactory<>(consumerProps());
@@ -71,6 +80,21 @@ public class KafkaConfig {
     @Bean
     public NewTopic topicEmail() {
         return buildTopic(emailTopic);
+    }
+
+    @Bean
+    public NewTopic topicOrchestrator() {
+        return buildTopic(orchestratorTopic);
+    }
+
+    @Bean
+    public NewTopic topicProductSuccess() {
+        return buildTopic(productSuccessTopic);
+    }
+
+    @Bean
+    public NewTopic topicProductFail() {
+        return buildTopic(productFailTopic);
     }
 
 }

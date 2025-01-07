@@ -9,6 +9,9 @@ spring:
     bootstrap-servers: ${KAFKA_BROKER:localhost:9092}
     topic:
       email: email
+      orchestrator: orchestrator
+      product-success: product-success
+      product-fail: product-fail
     consumer:
       group-id: products-group
       auto-offset-reset: latest
@@ -31,18 +34,18 @@ spring:
         jwt:
           issuer-uri: ${ISSUER_URI}
           jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/oauth2/jwks
-#      client:
-#        registration:
-#          account-hotmart:
-#            provider: ${PROVIDER_NAME}
-#            client-id: ${CLIENT_ID}
-#            client-secret: ${CLIENT_SECRET}
-#            authorization-grant-type: ${AUTHORIZATION_GRANT_TYPE}
-#            scope: ${SCOPE}
-#            client-name: ${CLIENT_NAME}
-#        provider:
-#          hotmart:
-#            issuer-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}
+      client:
+        registration:
+          account-hotmart:
+            provider: ${PROVIDER_NAME}
+            client-id: ${CLIENT_ID}
+            client-secret: ${CLIENT_SECRET}
+            authorization-grant-type: ${AUTHORIZATION_GRANT_TYPE}
+            scope: ${SCOPE}
+            client-name: ${CLIENT_NAME}
+        provider:
+          hotmart:
+            issuer-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}
 
 logging:
   level:

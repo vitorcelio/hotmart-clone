@@ -1,6 +1,6 @@
 package com.hotmart.products.dto.request;
 
-import com.hotmart.products.enums.ProductType;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -35,12 +35,15 @@ public class ProductRequestDTO {
     @NotNull(message = "O prazo para solicitação de reembolso é obrigatório")
     private Integer dayRefundRequest;
 
+    private boolean affiliation;
+
     private String paymentMethod;
 
     private BigDecimal price;
 
     private String image;
 
+    @Valid
     private List<PlanRequestDTO> plans;
 
 }

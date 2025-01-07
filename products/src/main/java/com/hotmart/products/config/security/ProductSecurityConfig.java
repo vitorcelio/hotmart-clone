@@ -1,5 +1,6 @@
 package com.hotmart.products.config.security;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -13,7 +14,10 @@ import org.springframework.security.oauth2.client.AuthorizedClientServiceOAuth2A
 import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProviderBuilder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
@@ -27,6 +31,19 @@ import java.util.List;
 @Configuration
 @EnableMethodSecurity(prePostEnabled = true)
 public class ProductSecurityConfig {
+
+    @Value("${spring.security.oauth2.client.registration.account-hotmart.client-id}")
+    private String clientId;
+    @Value("${spring.security.oauth2.client.registration.account-hotmart.client-secret}")
+    private String clientSecret;
+    @Value("${spring.security.oauth2.client.registration.account-hotmart.authorization-grant-type}")
+    private String authorizationGrantType;
+    @Value("${spring.security.oauth2.client.registration.account-hotmart.scope}")
+    private String scope;
+    @Value("${spring.security.oauth2.client.registration.account-hotmart.client-name}")
+    private String clientName;
+    @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
+    private String issuerUri;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -70,43 +87,43 @@ public class ProductSecurityConfig {
         return converter;
     }
 
-//    @Bean
-//    ClientRegistrationRepository clientRegistrationRepository() {
-//        // Mesma configuração que temos no nosso application.yml
-//        ClientRegistration client = ClientRegistration
-//                .withRegistrationId(clientName)
-//                .clientId(clientId)
-//                .clientSecret(clientSecret)
-//                .authorizationGrantType(new AuthorizationGrantType(authorizationGrantType))
-//                .scope(scope)
-//                .clientName(clientName)
-//                .tokenUri(issuerUri + "/oauth2/token").build();
-//
-//        return new InMemoryClientRegistrationRepository(client);
-//    }
+    @Bean
+    ClientRegistrationRepository clientRegistrationRepository() {
+        // Mesma configuração que temos no nosso application.yml
+        ClientRegistration client = ClientRegistration
+                .withRegistrationId(clientName)
+                .clientId(clientId)
+                .clientSecret(clientSecret)
+                .authorizationGrantType(new AuthorizationGrantType(authorizationGrantType))
+                .scope(scope)
+                .clientName(clientName)
+                .tokenUri(issuerUri + "/oauth2/token").build();
 
-//    @Bean
-//    public OAuth2AuthorizedClientService oAuth2AuthorizedClientService(ClientRegistrationRepository clientRegistrationRepository) {
-//        return new InMemoryOAuth2AuthorizedClientService(clientRegistrationRepository);
-//    }
-//
-//    @Bean
-//    public AuthorizedClientServiceOAuth2AuthorizedClientManager authorizedClientManager(
-//            ClientRegistrationRepository clientRegistrationRepository,
-//            OAuth2AuthorizedClientService authorizedClientService
-//    ) {
-//        var authorizedClientProvider = OAuth2AuthorizedClientProviderBuilder.builder()
-//                .clientCredentials()
-//                .build();
-//
-//        var authorizedClientManager =
-//                new AuthorizedClientServiceOAuth2AuthorizedClientManager(
-//                        clientRegistrationRepository,
-//                        authorizedClientService);
-//
-//        authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
-//
-//        return authorizedClientManager;
-//    }
+        return new InMemoryClientRegistrationRepository(client);
+    }
+
+    @Bean
+    public OAuth2AuthorizedClientService oAuth2AuthorizedClientService(ClientRegistrationRepository clientRegistrationRepository) {
+        return new InMemoryOAuth2AuthorizedClientService(clientRegistrationRepository);
+    }
+
+    @Bean
+    public AuthorizedClientServiceOAuth2AuthorizedClientManager authorizedClientManager(
+            ClientRegistrationRepository clientRegistrationRepository,
+            OAuth2AuthorizedClientService authorizedClientService
+    ) {
+        var authorizedClientProvider = OAuth2AuthorizedClientProviderBuilder.builder()
+                .clientCredentials()
+                .build();
+
+        var authorizedClientManager =
+                new AuthorizedClientServiceOAuth2AuthorizedClientManager(
+                        clientRegistrationRepository,
+                        authorizedClientService);
+
+        authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
+
+        return authorizedClientManager;
+    }
 
 }

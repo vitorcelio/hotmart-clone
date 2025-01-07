@@ -1,4 +1,4 @@
-package com.hotmart.notifications.client.user;
+package com.hotmart.products.client.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

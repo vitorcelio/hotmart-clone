@@ -9,10 +9,12 @@ import com.hotmart.products.enums.BillingMethod;
 import com.hotmart.products.enums.PaymentMethod;
 import com.hotmart.products.enums.PeriodicitySubscription;
 import com.hotmart.products.enums.ProductType;
+import com.hotmart.products.models.Buyer;
 import com.hotmart.products.models.Category;
 import com.hotmart.products.models.Plan;
 import com.hotmart.products.models.Product;
 import com.hotmart.products.producer.KafkaProducer;
+import com.hotmart.products.repositories.BuyerRepository;
 import com.hotmart.products.repositories.CategoryRepository;
 import com.hotmart.products.repositories.PlanRepository;
 import com.hotmart.products.repositories.ProductRepository;
@@ -24,7 +26,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static com.hotmart.products.utils.ProductUtils.getUserId;
 import static com.hotmart.products.utils.ProductUtils.validationUser;
@@ -38,6 +42,7 @@ public class ProductServiceImpl implements ProductService {
     private final PlanRepository planRepository;
     private final CategoryRepository categoryRepository;
     private final KafkaProducer producer;
+    private final BuyerRepository buyerRepository;
 
     @Override
     public ProductResponseDTO save(@NonNull ProductRequestDTO request) {
@@ -83,6 +88,52 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductResponseDTO> findAll(String name, Integer categoryId) {
         List<Product> list = repository.findAllProducts(getUserId(), categoryId, name);
+
+        list.forEach(product -> {
+            if (product.getType() == ProductType.SUBSCRIPTION) {
+                List<Plan> plans = planRepository.findAllByProductId(product.getId());
+                product.setPlans(PlanResponseDTO.convert(plans));
+            }
+        });
+
+        return ProductResponseDTO.convert(list);
+    }
+
+    @Override
+    public List<ProductResponseDTO> findAllBuyerProducts() {
+        Buyer buyer = buyerRepository.findByUserId(getUserId()).orElseThrow(() -> new ValidationException("Comprador não encontrado"));
+
+        List<Product> list = repository.findAllByBuyerUserId(buyer.getUserId());
+
+        list.forEach(product -> {
+
+            if (product.getType() == ProductType.SUBSCRIPTION) {
+                Optional<Plan> plan = planRepository.findByProductIdAndBuyerId(product.getId(), buyer.getId());
+                product.setPlans(plan.map(value -> List.of(new PlanResponseDTO(value))).orElse(null));
+            }
+
+        });
+
+        return ProductResponseDTO.convert(list);
+    }
+
+    @Override
+    public List<ProductResponseDTO> findAllAffiliateProducts() {
+        List<Product> list = repository.findAllByAffiliateUserId(getUserId());
+
+        list.forEach(product -> {
+            if (product.getType() == ProductType.SUBSCRIPTION) {
+                List<Plan> plans = planRepository.findAllByProductId(product.getId());
+                product.setPlans(PlanResponseDTO.convert(plans));
+            }
+        });
+
+        return ProductResponseDTO.convert(list);
+    }
+
+    @Override
+    public List<ProductResponseDTO> findAllProductsAffiliateRequest() {
+        List<Product> list = repository.findAllPendingByAffiliateUserId(getUserId());
 
         list.forEach(product -> {
             if (product.getType() == ProductType.SUBSCRIPTION) {

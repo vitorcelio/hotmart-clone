@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -54,6 +55,10 @@ public class Product {
 
     @Column(precision = 19, scale = 2)
     private BigDecimal price;
+
+    @ColumnDefault(value = "false")
+    @Column(nullable = false)
+    private boolean affiliation;
 
     @Column(columnDefinition = "TEXT")
     private String image;
