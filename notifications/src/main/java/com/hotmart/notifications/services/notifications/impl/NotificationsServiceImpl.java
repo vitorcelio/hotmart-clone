@@ -1,10 +1,10 @@
 package com.hotmart.notifications.services.notifications.impl;
 
 import com.hotmart.notifications.config.exception.ValidationException;
+import com.hotmart.notifications.documents.Notifications;
 import com.hotmart.notifications.dto.event.EventDTO;
 import com.hotmart.notifications.dto.response.NotificationsResponseDTO;
 import com.hotmart.notifications.enums.SentStatus;
-import com.hotmart.notifications.models.Notifications;
 import com.hotmart.notifications.repositories.NotificationsRepository;
 import com.hotmart.notifications.services.notifications.NotificationsService;
 import com.hotmart.notifications.services.security.SecurityService;
@@ -53,7 +53,7 @@ public class NotificationsServiceImpl implements NotificationsService {
     }
 
     @Override
-    public void viewedOrSent(@NonNull Long id, @NonNull SentStatus status) {
+    public void viewedOrSent(@NonNull String id, @NonNull SentStatus status) {
         Notifications notifications = repository.findById(id).orElseThrow(() -> new ValidationException("Notificação não encontrada"));
 
         notifications.setViewedOrSent(true);

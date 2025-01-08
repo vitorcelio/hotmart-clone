@@ -11,7 +11,7 @@ public interface NotificationsService {
 
     NotificationsResponseDTO save(@NonNull EventDTO event);
 
-    void viewedOrSent(@NonNull Long id, @NonNull SentStatus status);
+    void viewedOrSent(@NonNull String id, @NonNull SentStatus status);
 
     List<NotificationsResponseDTO> findAll();
 

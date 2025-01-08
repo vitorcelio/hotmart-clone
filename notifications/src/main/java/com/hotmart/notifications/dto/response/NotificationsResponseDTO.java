@@ -3,7 +3,7 @@ package com.hotmart.notifications.dto.response;
 import com.hotmart.notifications.enums.EventType;
 import com.hotmart.notifications.enums.SentStatus;
 import com.hotmart.notifications.enums.TemplateType;
-import com.hotmart.notifications.models.Notifications;
+import com.hotmart.notifications.documents.Notifications;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class NotificationsResponseDTO {
 
-    private Long id;
+    private String id;
     private String title;
     private SentStatus status;
     private EventType type;
