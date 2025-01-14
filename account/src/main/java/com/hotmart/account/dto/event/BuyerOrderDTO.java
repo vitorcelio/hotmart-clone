@@ -1,4 +1,4 @@
-package com.hotmart.orders.documents;
+package com.hotmart.account.dto.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BuyerOrder {
+public class BuyerOrderDTO {
 
     private String name;
     private String email;

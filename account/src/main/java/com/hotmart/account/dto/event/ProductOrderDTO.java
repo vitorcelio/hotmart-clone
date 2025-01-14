@@ -1,4 +1,4 @@
-package com.hotmart.orders.documents;
+package com.hotmart.account.dto.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,12 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BuyerOrder {
+public class ProductOrderDTO {
 
+    private Long id;
+    private Long planId;
     private String name;
-    private String email;
-    private String cpfCnpj;
-    private String phone;
-    private Long userId;
+    private String type;
 
 }

@@ -1,4 +1,4 @@
-package com.hotmart.orders.enums;
+package com.hotmart.account.enums;
 
 public enum SagaStatus {
 

@@ -1,6 +1,8 @@
 package com.hotmart.products.services.product.impl;
 
 import com.hotmart.products.config.exception.ValidationException;
+import com.hotmart.products.dto.event.HistoryDTO;
+import com.hotmart.products.dto.event.OrderEventDTO;
 import com.hotmart.products.dto.request.PlanRequestDTO;
 import com.hotmart.products.dto.request.ProductRequestDTO;
 import com.hotmart.products.dto.response.PlanResponseDTO;
@@ -14,22 +16,26 @@ import com.hotmart.products.models.Category;
 import com.hotmart.products.models.Plan;
 import com.hotmart.products.models.Product;
 import com.hotmart.products.producer.KafkaProducer;
-import com.hotmart.products.repositories.BuyerRepository;
 import com.hotmart.products.repositories.CategoryRepository;
 import com.hotmart.products.repositories.PlanRepository;
 import com.hotmart.products.repositories.ProductRepository;
+import com.hotmart.products.services.buyer.BuyerService;
 import com.hotmart.products.services.product.ProductService;
+import com.hotmart.products.services.validation.ValidationService;
+import com.hotmart.products.utils.JsonUtil;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static com.hotmart.products.enums.SagaStatus.*;
 import static com.hotmart.products.utils.ProductUtils.getUserId;
 import static com.hotmart.products.utils.ProductUtils.validationUser;
 
@@ -38,11 +44,41 @@ import static com.hotmart.products.utils.ProductUtils.validationUser;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
+    private static final String CURRENT_SOURCE = "PRODUCT_SERVICE";
+
     private final ProductRepository repository;
     private final PlanRepository planRepository;
     private final CategoryRepository categoryRepository;
     private final KafkaProducer producer;
-    private final BuyerRepository buyerRepository;
+    private final BuyerService buyerService;
+    private final ValidationService validationService;
+    private final JsonUtil jsonUtil;
+
+    @Value("${spring.kafka.topic.orchestrator}")
+    private String orchestrator;
+
+    @Override
+    public void validateProductSaga(@NonNull OrderEventDTO event) {
+        try {
+            validationProduct(event);
+            validationService.createValidation(event, true);
+            handleSuccess(event);
+        } catch (Exception e) {
+            log.error("Erro na validação do produto: ", e);
+            handleFail(event, e.getMessage());
+        }
+
+        sendOrchestratorSaga(event);
+    }
+
+    @Override
+    public void rollbackProductSaga(@NonNull OrderEventDTO event) {
+        validationService.changeValidationToFail(event);
+        event.setStatus(FAIL);
+        event.setSource(CURRENT_SOURCE);
+        addHistory(event, "Rollback executado para validação do produto");
+        sendOrchestratorSaga(event);
+    }
 
     @Override
     public ProductResponseDTO save(@NonNull ProductRequestDTO request) {
@@ -101,7 +137,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductResponseDTO> findAllBuyerProducts() {
-        Buyer buyer = buyerRepository.findByUserId(getUserId()).orElseThrow(() -> new ValidationException("Comprador não encontrado"));
+        Buyer buyer = buyerService.findByUserId(getUserId());
 
         List<Product> list = repository.findAllByBuyerUserId(buyer.getUserId());
 
@@ -311,6 +347,50 @@ public class ProductServiceImpl implements ProductService {
         if (plans.size() == 1) {
             throw new ValidationException("Não é possivel deletar este plano. O produto precisa ter ao menos um plano cadastrado");
         }
+    }
+
+    private void addHistory(@NonNull OrderEventDTO event, @NonNull String message) {
+        var history = HistoryDTO.builder()
+                .source(event.getSource())
+                .status(event.getStatus())
+                .message(message)
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        event.addHistory(history);
+    }
+
+    private void validationProduct(@NonNull OrderEventDTO event) {
+        if (event.getOrder().getProduct().getId() == null) {
+            throw new ValidationException("Produto deve ser informado");
+        }
+
+        if (ObjectUtils.isEmpty(event.getOrderId()) || ObjectUtils.isEmpty(event.getTransactionId())) {
+            throw new ValidationException("OrderId ou TransactionId devem ser informados");
+        }
+
+        if (validationService.existsByOrderIdAndTransactionId(event.getOrderId(), event.getTransactionId())) {
+            throw new ValidationException("Já existe uma transação aberta para essa validação");
+        }
+
+        repository.findById(event.getOrder().getProduct().getId()).orElseThrow(() -> new ValidationException("Produto não encontrado"));
+    }
+
+    private void handleFail(@NonNull OrderEventDTO event, @NonNull String message) {
+        event.setStatus(ROLLBACK);
+        event.setSource(CURRENT_SOURCE);
+        addHistory(event, "Falha ao validar produtos: ".concat(message));
+    }
+
+    private void handleSuccess(@NonNull OrderEventDTO event) {
+        event.setStatus(SUCCESS);
+        event.setSource(CURRENT_SOURCE);
+        addHistory(event, "Produtos validados com sucesso");
+    }
+
+    private void sendOrchestratorSaga(@NonNull OrderEventDTO event) {
+        String payload = jsonUtil.toJson(event);
+        producer.sendEvent(payload, orchestrator);
     }
 
 }

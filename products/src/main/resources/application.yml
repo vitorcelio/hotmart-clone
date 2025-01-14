@@ -12,6 +12,8 @@ spring:
       orchestrator: orchestrator
       product-success: product-success
       product-fail: product-fail
+      buyer-success: buyer-success
+      buyer-fail: buyer-fail
     consumer:
       group-id: products-group
       auto-offset-reset: latest

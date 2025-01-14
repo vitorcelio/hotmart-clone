@@ -1,7 +1,7 @@
-package com.hotmart.products.utils;
+package com.hotmart.orders.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hotmart.products.dto.event.OrderEventDTO;
+import com.hotmart.orders.documents.OrderEvent;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,13 +20,17 @@ public class JsonUtil {
         }
     }
 
-    public OrderEventDTO toEvent(String json) {
+    private <T> T toObject(String json, Class<T> classType) {
         try {
-            return objectMapper.readValue(json, OrderEventDTO.class);
+            return objectMapper.readValue(json, classType);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public OrderEvent toEvent(String json) {
+        return toObject(json, OrderEvent.class);
     }
 
 }

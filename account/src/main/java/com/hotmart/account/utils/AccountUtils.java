@@ -1,12 +1,15 @@
 package com.hotmart.account.utils;
 
+import lombok.NonNull;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 
+import java.text.Normalizer;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class AccountUtils {
@@ -31,6 +34,12 @@ public class AccountUtils {
         return values.stream()
                 .map(AuthorizationGrantType::new)
                 .collect(Collectors.toList());
+    }
+
+    public static String accentRemover(@NonNull String text) {
+        return Pattern.compile("\\p{InCombiningDiacriticalMarks}+")
+                .matcher(Normalizer.normalize(text, Normalizer.Form.NFD))
+                .replaceAll("");
     }
 
 }

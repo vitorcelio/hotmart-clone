@@ -7,21 +7,22 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class OrderRequestDTO {
 
-    @NotNull
-    private Long productId;
-    @NotNull
-    private BigDecimal price;
+    @Valid
+    private ProductOrderRequestDTO product;
+
     @Valid
     private BuyerOrderRequestDTO buyer;
+
     @Valid
     private AddressOrderRequestDTO address;
+
+    @Valid
+    private PaymentOrderRequestDTO payment;
 
 }

@@ -9,12 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BuyerOrder {
+public class ProductOrder {
 
+    private Long id;
+    private Long planId;
     private String name;
-    private String email;
-    private String cpfCnpj;
-    private String phone;
-    private Long userId;
+    private String type;
 
 }

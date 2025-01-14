@@ -1,6 +1,5 @@
 package com.hotmart.account.dto.request;
 
-import com.hotmart.account.enums.Roles;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,5 +23,8 @@ public class UserRequestDTO {
 
     @NotBlank(message = "O tipo de usuário é obrigatório")
     private String role;
+
+    private String cpfCnpj;
+    private String phone;
 
 }

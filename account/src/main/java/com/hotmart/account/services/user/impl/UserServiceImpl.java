@@ -2,6 +2,8 @@ package com.hotmart.account.services.user.impl;
 
 import com.hotmart.account.config.exception.ValidationException;
 import com.hotmart.account.dto.event.AccessDataEventDTO;
+import com.hotmart.account.dto.event.HistoryDTO;
+import com.hotmart.account.dto.event.OrderEventDTO;
 import com.hotmart.account.dto.event.RecoverPasswordEventDTO;
 import com.hotmart.account.dto.request.UserRequestDTO;
 import com.hotmart.account.dto.request.UserUpdatePasswordRequestDTO;
@@ -16,6 +18,7 @@ import com.hotmart.account.producer.KafkaProducer;
 import com.hotmart.account.repositories.DataAccessRepository;
 import com.hotmart.account.repositories.UserRepository;
 import com.hotmart.account.services.user.UserService;
+import com.hotmart.account.utils.AccountUtils;
 import com.hotmart.account.utils.JsonUtil;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -28,10 +31,13 @@ import org.springframework.util.ObjectUtils;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
 import static com.hotmart.account.enums.EventType.EMAIL;
+import static com.hotmart.account.enums.SagaStatus.ROLLBACK;
+import static com.hotmart.account.enums.SagaStatus.SUCCESS;
 import static com.hotmart.account.enums.TemplateType.CHANGE_PASSWORD;
 import static com.hotmart.account.enums.TemplateType.DATA_ACCESS;
 
@@ -40,16 +46,34 @@ import static com.hotmart.account.enums.TemplateType.DATA_ACCESS;
 @Service("myUserServiceImpl")
 public class UserServiceImpl implements UserService {
 
+    private static final String CURRENT_SOURCE = "USER_SERVICE";
     private static final String USER_ALREADY_EXISTS = "Usuário com :x :y já cadastrado!";
     private static final String USER_NOT_FOUND = "Usuário não encontrado!";
 
     private final UserRepository userRepository;
     private final DataAccessRepository dataAccessRepository;
     private final JsonUtil jsonUtil;
-    private final KafkaProducer kafkaProducer;
+    private final KafkaProducer producer;
 
     @Value("${spring.kafka.topic.email}")
     private String emailTopic;
+
+    @Value("${spring.kafka.topic.orchestrator}")
+    private String orchestrator;
+
+    @Override
+    public void createUserSaga(@NonNull OrderEventDTO event) {
+        try {
+            validationUser(event);
+            createUser(event);
+            handleSuccess(event);
+        } catch (Exception e) {
+            log.error("Erro na validação do usuário: ", e);
+            handleFail(event, e.getMessage());
+        }
+
+        sendOrchestratorSaga(event);
+    }
 
     @Override
     public UserResponseDTO save(@NonNull UserRequestDTO request) {
@@ -147,6 +171,8 @@ public class UserServiceImpl implements UserService {
                 .email(request.getEmail())
                 .password(request.getPassword())
                 .roles(roles)
+                .cpfCnpj(request.getCpfCnpj())
+                .phone(request.getPhone())
                 .build();
 
         User userSave = userRepository.save(user);
@@ -260,8 +286,47 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    private void validationUser(@NonNull OrderEventDTO event) {
+        if (ObjectUtils.isEmpty(event.getOrder().getBuyer().getEmail())) {
+            throw new ValidationException("Email não foi informado");
+        }
+
+        if (ObjectUtils.isEmpty(event.getOrder().getBuyer().getCpfCnpj())) {}
+    }
+
+    private void createUser(@NonNull OrderEventDTO event) {
+        Optional<User> user = userRepository.findByEmail(event.getOrder().getBuyer().getEmail());
+
+        if (user.isPresent()) {
+            User userEmail = user.get();
+            event.getOrder().getBuyer().setUserId(userEmail.getId());
+        } else {
+            log.info("Usuário não existe, será cadastrado com email {}", event.getOrder().getBuyer().getEmail());
+
+            var nameSeparate = event.getOrder().getBuyer().getName().split(" ");
+            String password = AccountUtils.accentRemover(
+                    nameSeparate.length > 1 ?
+                            String.format("@A1b2c3_%s_%s", nameSeparate[0], nameSeparate[1]) :
+                            String.format("@A1b2c3_%s", nameSeparate[0])
+            );
+
+            var request = UserRequestDTO.builder()
+                    .email(event.getOrder().getBuyer().getEmail())
+                    .name(event.getOrder().getBuyer().getName())
+                    .password(new BCryptPasswordEncoder().encode(password))
+                    .role(Roles.BUYER.name())
+                    .cpfCnpj(event.getOrder().getBuyer().getCpfCnpj())
+                    .phone(event.getOrder().getBuyer().getPhone())
+                    .build();
+
+            UserResponseDTO userEmail = save(request);
+            event.getOrder().getBuyer().setUserId(userEmail.getId());
+        }
+
+    }
+
     private void sendNotification(@NonNull String event, @NonNull String topic) {
-        kafkaProducer.sendEvent(event, topic);
+        producer.sendEvent(event, topic);
     }
 
     private void sendNotificationAccessData(@NonNull DataAccess dataAccess) {
@@ -295,6 +360,32 @@ public class UserServiceImpl implements UserService {
         sendNotification(jsonUtil.toJson(event), emailTopic);
     }
 
+    private void addHistory(@NonNull OrderEventDTO event, @NonNull String message) {
+        var history = HistoryDTO.builder()
+                .source(event.getSource())
+                .status(event.getStatus())
+                .message(message)
+                .createdAt(LocalDateTime.now())
+                .build();
 
+        event.addHistory(history);
+    }
+
+    private void handleFail(@NonNull OrderEventDTO event, @NonNull String message) {
+        event.setStatus(ROLLBACK);
+        event.setSource(CURRENT_SOURCE);
+        addHistory(event, "Falha ao validar usuário: ".concat(message));
+    }
+
+    private void handleSuccess(@NonNull OrderEventDTO event) {
+        event.setStatus(SUCCESS);
+        event.setSource(CURRENT_SOURCE);
+        addHistory(event, "Usuário validado com sucesso");
+    }
+
+    private void sendOrchestratorSaga(@NonNull OrderEventDTO event) {
+        String payload = jsonUtil.toJson(event);
+        producer.sendEvent(payload, orchestrator);
+    }
 
 }

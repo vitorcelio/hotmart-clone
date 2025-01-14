@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Document(collection = "events")
-public class Event {
+public class OrderEvent {
 
     @Id
     private String id;

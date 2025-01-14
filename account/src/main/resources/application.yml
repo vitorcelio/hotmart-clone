@@ -10,6 +10,9 @@ spring:
     bootstrap-servers: ${KAFKA_BROKER:localhost:9092}
     topic:
       email: email
+      orchestrator: orchestrator
+      product-success: product-success
+      product-fail: product-fail
     consumer:
       group-id: account-group
       auto-offset-reset: latest

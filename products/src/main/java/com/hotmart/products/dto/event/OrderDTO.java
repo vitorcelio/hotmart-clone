@@ -1,12 +1,11 @@
-package com.hotmart.orders.documents;
+package com.hotmart.products.dto.event;
 
-import com.hotmart.orders.enums.SagaStatus;
+import com.hotmart.products.enums.SagaStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
@@ -14,17 +13,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Document(collection = "orders")
-public class Order {
+public class OrderDTO {
 
     @Id
     private String id;
     private String transactionId;
     private LocalDateTime createdAt;
     private SagaStatus status;
-    private ProductOrder product;
-    private BuyerOrder buyer;
-    private AddressOrder address;
-    private PaymentOrder payment;
+    private ProductOrderDTO product;
+    private BuyerOrderDTO buyer;
+    private AddressOrderDTO address;
+    private PaymentOrderDTO payment;
 
 }

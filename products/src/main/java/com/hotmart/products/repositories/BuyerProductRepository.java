@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface BuyerProductRepository extends JpaRepository<BuyerProduct, BuyerProductPK> {
 
-    boolean existsBuyerProductByBuyerIdAndProductId(Long buyerId, Long productId);
+    boolean existsBuyerProductByBuyer_UserIdAndProductId(Long userId, Long productId);
 
     @Transactional
     @Modifying

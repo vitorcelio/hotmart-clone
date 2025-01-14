@@ -1,5 +1,6 @@
 package com.hotmart.account.services.user;
 
+import com.hotmart.account.dto.event.OrderEventDTO;
 import com.hotmart.account.dto.request.UserRequestDTO;
 import com.hotmart.account.dto.request.UserUpdatePasswordRequestDTO;
 import com.hotmart.account.dto.request.UserUpdateRequestDTO;
@@ -9,6 +10,8 @@ import lombok.NonNull;
 import java.util.List;
 
 public interface UserService {
+
+    void createUserSaga(@NonNull OrderEventDTO event);
 
     UserResponseDTO save(@NonNull final UserRequestDTO request);
 

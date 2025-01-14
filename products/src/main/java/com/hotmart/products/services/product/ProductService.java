@@ -1,5 +1,6 @@
 package com.hotmart.products.services.product;
 
+import com.hotmart.products.dto.event.OrderEventDTO;
 import com.hotmart.products.dto.request.PlanRequestDTO;
 import com.hotmart.products.dto.request.ProductRequestDTO;
 import com.hotmart.products.dto.response.PlanResponseDTO;
@@ -9,6 +10,10 @@ import lombok.NonNull;
 import java.util.List;
 
 public interface ProductService {
+
+    void validateProductSaga(@NonNull OrderEventDTO event);
+
+    void rollbackProductSaga(@NonNull OrderEventDTO event);
 
     ProductResponseDTO save(@NonNull ProductRequestDTO request);
 
