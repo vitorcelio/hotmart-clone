@@ -27,6 +27,9 @@ public class KafkaConfig {
     @Value("${spring.kafka.topic.email}")
     private String emailTopic;
 
+    @Value("${spring.kafka.topic.user-success}")
+    private String userSuccessTopic;
+
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
         return new DefaultKafkaConsumerFactory<>(consumerProps());
@@ -71,6 +74,11 @@ public class KafkaConfig {
     @Bean
     public NewTopic topicEmail() {
         return buildTopic(emailTopic);
+    }
+
+    @Bean
+    public NewTopic topicUserSuccess() {
+        return buildTopic(userSuccessTopic);
     }
 
 }

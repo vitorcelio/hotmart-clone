@@ -18,5 +18,6 @@ public class ProductOrderDTO {
     private Long planId;
     private String name;
     private ProductType type;
+    private BigDecimal price;
 
 }

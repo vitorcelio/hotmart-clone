@@ -11,8 +11,7 @@ spring:
     topic:
       email: email
       orchestrator: orchestrator
-      product-success: product-success
-      product-fail: product-fail
+      user-success: product-success
     consumer:
       group-id: account-group
       auto-offset-reset: latest

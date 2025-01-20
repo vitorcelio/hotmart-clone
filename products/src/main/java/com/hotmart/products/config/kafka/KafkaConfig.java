@@ -27,14 +27,22 @@ public class KafkaConfig {
     @Value("${spring.kafka.topic.email}")
     private String emailTopic;
 
-    @Value("${spring.kafka.topic.orchestrator}")
-    private String orchestratorTopic;
-
-    @Value("${spring.kafka.topic.product-success}")
-    private String productSuccessTopic;
+    @Value("${spring.kafka.topic.product-start}")
+    private String productStartTopic;
 
     @Value("${spring.kafka.topic.product-fail}")
     private String productFailTopic;
+
+    @Value("${spring.kafka.topic.buyer-success}")
+    private String buyerSuccessTopic;
+
+    @Value("${spring.kafka.topic.buyer-fail}")
+    private String buyerFailTopic;
+
+
+
+    @Value("${spring.kafka.topic.notify-ending}")
+    private String notifyEndingTopic;
 
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
@@ -83,18 +91,28 @@ public class KafkaConfig {
     }
 
     @Bean
-    public NewTopic topicOrchestrator() {
-        return buildTopic(orchestratorTopic);
-    }
-
-    @Bean
-    public NewTopic topicProductSuccess() {
-        return buildTopic(productSuccessTopic);
+    public NewTopic topicProductStart() {
+        return buildTopic(productStartTopic);
     }
 
     @Bean
     public NewTopic topicProductFail() {
         return buildTopic(productFailTopic);
+    }
+
+    @Bean
+    public NewTopic topicBuyerSuccess() {
+        return buildTopic(buyerSuccessTopic);
+    }
+
+    @Bean
+    public NewTopic topicBuyerFail() {
+        return buildTopic(buyerFailTopic);
+    }
+
+    @Bean
+    public NewTopic topicNotifyEnding() {
+        return buildTopic(notifyEndingTopic);
     }
 
 }

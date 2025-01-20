@@ -27,8 +27,8 @@ public class KafkaConfig {
     @Value("${spring.kafka.topic.email}")
     private String emailTopic;
 
-    @Value("${spring.kafka.topic.start-saga}")
-    private String startSagaTopic;
+    @Value("${spring.kafka.topic.product-start}")
+    private String productStartTopic;
 
     @Value("${spring.kafka.topic.notify-ending}")
     private String notifyEndingTopic;
@@ -80,8 +80,8 @@ public class KafkaConfig {
     }
 
     @Bean
-    public NewTopic topicStartSaga() {
-        return buildTopic(startSagaTopic);
+    public NewTopic topicProductStart() {
+        return buildTopic(productStartTopic);
     }
 
     @Bean

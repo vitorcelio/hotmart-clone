@@ -1,9 +1,10 @@
 package com.hotmart.orders.services.order.impl;
 
 import com.hotmart.orders.config.exception.ValidationException;
-import com.hotmart.orders.documents.OrderEvent;
 import com.hotmart.orders.documents.Order;
+import com.hotmart.orders.documents.OrderEvent;
 import com.hotmart.orders.dto.request.OrderRequestDTO;
+import com.hotmart.orders.dto.response.TransactionResponseDTO;
 import com.hotmart.orders.enums.SagaStatus;
 import com.hotmart.orders.producer.KafkaProducer;
 import com.hotmart.orders.repositories.OrderRepository;
@@ -30,11 +31,11 @@ public class OrderServiceImpl implements OrderService {
     private final KafkaProducer kafkaProducer;
     private final JsonUtil jsonUtil;
 
-    @Value("${spring.kafka.topic.start-saga}")
-    private String startSaga;
+    @Value("${spring.kafka.topic.product-start}")
+    private String productStartTopic;
 
     @Override
-    public Order save(@NonNull OrderRequestDTO request) {
+    public TransactionResponseDTO save(@NonNull OrderRequestDTO request) {
 
         if (!request.getPayment().validation()) {
             throw new ValidationException("Os campos de pagamento são obrigatórios.");
@@ -52,14 +53,17 @@ public class OrderServiceImpl implements OrderService {
 
         repository.save(order);
         OrderEvent event = eventService.createEvent(order);
-        sendEventStartSaga(event);
+        sendEventProductStart(event);
 
-        return order;
+        return TransactionResponseDTO.builder()
+                .transactionId(order.getTransactionId())
+                .orderId(order.getId())
+                .build();
     }
 
-    private void sendEventStartSaga(OrderEvent event) {
+    private void sendEventProductStart(OrderEvent event) {
         String payload = jsonUtil.toJson(event);
-        kafkaProducer.sendEvent(payload, startSaga);
+        kafkaProducer.sendEvent(payload, productStartTopic);
     }
 
 }

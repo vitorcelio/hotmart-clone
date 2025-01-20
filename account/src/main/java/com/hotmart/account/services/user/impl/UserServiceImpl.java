@@ -303,12 +303,7 @@ public class UserServiceImpl implements UserService {
         } else {
             log.info("Usuário não existe, será cadastrado com email {}", event.getOrder().getBuyer().getEmail());
 
-            var nameSeparate = event.getOrder().getBuyer().getName().split(" ");
-            String password = AccountUtils.accentRemover(
-                    nameSeparate.length > 1 ?
-                            String.format("@A1b2c3_%s_%s", nameSeparate[0], nameSeparate[1]) :
-                            String.format("@A1b2c3_%s", nameSeparate[0])
-            );
+            String password = AccountUtils.generatedPassword(event.getOrder().getBuyer().getName());
 
             var request = UserRequestDTO.builder()
                     .email(event.getOrder().getBuyer().getEmail())

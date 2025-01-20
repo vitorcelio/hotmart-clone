@@ -3,6 +3,7 @@ package com.hotmart.orders.config.security;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -53,6 +54,7 @@ public class OrdersSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                    .requestMatchers(HttpMethod.POST, "api/v1/orders/create").permitAll()
                     .anyRequest().authenticated())
                 .csrf().disable()
                 .oauth2ResourceServer()

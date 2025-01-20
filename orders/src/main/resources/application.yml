@@ -9,7 +9,7 @@ spring:
     bootstrap-servers: ${KAFKA_BROKER:localhost:9092}
     topic:
       email: email
-      start-saga: start-saga
+      product-start: product-start
       notify-ending: notify-ending
     consumer:
       group-id: orders-group

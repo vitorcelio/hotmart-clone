@@ -9,6 +9,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.util.ObjectUtils;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,15 +18,17 @@ import org.springframework.util.ObjectUtils;
 public class PaymentOrderRequestDTO {
 
     @NotNull
-    private PaymentType type;
+    private String type;
     private String cardNumber;
     private String yearExpiry;
     private String monthExpiry;
     private String cardholderName;
     private Integer installment;
+    private BigDecimal price;
+    private BigDecimal totalPrice;
 
     public boolean validation() {
-        if (type == PaymentType.CREDIT_CARD) {
+        if (type.equals("CREDIT_CARD")) {
             return !ObjectUtils.isEmpty(cardNumber) && !ObjectUtils.isEmpty(yearExpiry) && !ObjectUtils.isEmpty(monthExpiry) && !ObjectUtils.isEmpty(cardholderName) && !ObjectUtils.isEmpty(installment);
         }
 
@@ -35,6 +39,8 @@ public class PaymentOrderRequestDTO {
         return PaymentOrder.builder()
                 .type(type)
                 .installment(installment)
+                .price(price)
+                .totalPrice(totalPrice)
                 .build();
     }
 

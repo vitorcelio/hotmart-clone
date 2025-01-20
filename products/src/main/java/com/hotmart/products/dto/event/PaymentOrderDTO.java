@@ -15,7 +15,8 @@ public class PaymentOrderDTO {
 
     private String type;
     private Integer installment;
-    private BigDecimal price;
     private String lastDigitsCardNumber;
+    private BigDecimal price;
+    private BigDecimal totalPrice;
 
 }

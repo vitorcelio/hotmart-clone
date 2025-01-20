@@ -42,4 +42,11 @@ public class AccountUtils {
                 .replaceAll("");
     }
 
+    public static String generatedPassword(String name) {
+        var nameSeparate = name.split(" ");
+        return AccountUtils.accentRemover(nameSeparate.length > 1 ?
+                        String.format("@A1b2c3_%s_%s", nameSeparate[0], nameSeparate[1]) :
+                        String.format("@A1b2c3_%s", nameSeparate[0]));
+    }
+
 }

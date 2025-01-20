@@ -40,9 +40,6 @@ public class BuyerServiceImpl implements BuyerService {
     private final JsonUtil jsonUtil;
     private final KafkaProducer producer;
 
-    @Value("${spring.kafka.topic.orchestrator}")
-    private String orchestrator;
-
     @Override
     public void createBuyerSaga(@NonNull OrderEventDTO event) {
         try {

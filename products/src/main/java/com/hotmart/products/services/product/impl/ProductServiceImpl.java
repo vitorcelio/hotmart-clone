@@ -54,9 +54,6 @@ public class ProductServiceImpl implements ProductService {
     private final ValidationService validationService;
     private final JsonUtil jsonUtil;
 
-    @Value("${spring.kafka.topic.orchestrator}")
-    private String orchestrator;
-
     @Override
     public void validateProductSaga(@NonNull OrderEventDTO event) {
         try {
@@ -373,7 +370,18 @@ public class ProductServiceImpl implements ProductService {
             throw new ValidationException("Já existe uma transação aberta para essa validação");
         }
 
-        repository.findById(event.getOrder().getProduct().getId()).orElseThrow(() -> new ValidationException("Produto não encontrado"));
+        Product product = repository.findById(event.getOrder().getProduct().getId()).orElseThrow(() -> new ValidationException("Produto não encontrado"));
+        event.getOrder().getProduct().setName(product.getName());
+
+        if (event.getOrder().getProduct().getType() == ProductType.SUBSCRIPTION) {
+            if (event.getOrder().getProduct().getPlanId() == null) {
+                throw new ValidationException("Plano deve ser informado");
+            }
+
+            planRepository.findById(event.getOrder().getProduct().getPlanId()).orElseThrow(() -> new ValidationException("Plano não encontrado"));
+        }
+
+
     }
 
     private void handleFail(@NonNull OrderEventDTO event, @NonNull String message) {

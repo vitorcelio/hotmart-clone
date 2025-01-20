@@ -20,7 +20,7 @@ public class ProductConsumer {
 
     @KafkaListener(
             groupId = "${spring.kafka.consumer.group-id}",
-            topics = "${spring.kafka.topic.product-success}"
+            topics = "${spring.kafka.topic.product-start}"
     )
     public void consumerSuccessEvent(String payload) {
         log.info("Recebendo evento [\n{}\n] do tópico product-success", payload);
