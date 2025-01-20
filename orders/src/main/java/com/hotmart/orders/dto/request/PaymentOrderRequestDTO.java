@@ -1,7 +1,6 @@
 package com.hotmart.orders.dto.request;
 
 import com.hotmart.orders.documents.PaymentOrder;
-import com.hotmart.orders.enums.PaymentType;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
