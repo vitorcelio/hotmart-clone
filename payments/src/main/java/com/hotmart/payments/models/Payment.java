@@ -1,5 +1,6 @@
 package com.hotmart.payments.models;
 
+import com.hotmart.payments.enums.PaymentGateway;
 import com.hotmart.payments.enums.PaymentStatus;
 import com.hotmart.payments.enums.PaymentType;
 import jakarta.persistence.*;
@@ -44,6 +45,10 @@ public class Payment {
 
     @Column(name = "user_id", nullable = false)
     private Long userId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PaymentGateway gateway;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

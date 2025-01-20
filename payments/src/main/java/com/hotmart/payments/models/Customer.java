@@ -1,11 +1,12 @@
 package com.hotmart.payments.models;
 
-import com.hotmart.payments.enums.PaymentGateway;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -27,9 +28,8 @@ public class Customer {
     
     @Column(name = "integration_id", nullable = false)
     private String integrationId;
-    
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private PaymentGateway gateway;
+
+    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    private List<ApiKeys> apiKeys;
     
 }
