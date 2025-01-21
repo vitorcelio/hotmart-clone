@@ -1,4 +1,4 @@
-package com.hotmart.account.dto.event;
+package com.hotmart.payments.dto.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,13 +11,12 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductOrderDTO {
+public class PaymentOrderDTO {
 
-    private Long id;
-    private Long planId;
-    private String name;
     private String type;
+    private Integer installment;
+    private String lastDigitsCardNumber;
     private BigDecimal price;
-    private String method;
+    private BigDecimal totalPrice;
 
 }

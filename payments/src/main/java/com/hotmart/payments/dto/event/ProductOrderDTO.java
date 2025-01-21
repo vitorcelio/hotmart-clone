@@ -1,5 +1,6 @@
-package com.hotmart.account.dto.event;
+package com.hotmart.payments.dto.event;
 
+import com.hotmart.payments.enums.PaymentMethod;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +19,6 @@ public class ProductOrderDTO {
     private String name;
     private String type;
     private BigDecimal price;
-    private String method;
+    private PaymentMethod method;
 
 }

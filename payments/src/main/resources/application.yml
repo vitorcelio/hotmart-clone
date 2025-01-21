@@ -53,3 +53,7 @@ logging:
     org:
       apache:
         kafka: OFF
+
+payment:
+  provider:
+    api-key: ${API_KEY}

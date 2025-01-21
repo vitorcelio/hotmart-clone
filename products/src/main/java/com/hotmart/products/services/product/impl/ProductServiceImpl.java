@@ -26,7 +26,6 @@ import com.hotmart.products.utils.JsonUtil;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -65,7 +64,7 @@ public class ProductServiceImpl implements ProductService {
             handleFail(event, e.getMessage());
         }
 
-        sendOrchestratorSaga(event);
+        sendSaga(event);
     }
 
     @Override
@@ -74,12 +73,12 @@ public class ProductServiceImpl implements ProductService {
         event.setStatus(FAIL);
         event.setSource(CURRENT_SOURCE);
         addHistory(event, "Rollback executado para validação do produto");
-        sendOrchestratorSaga(event);
+        sendSaga(event);
     }
 
     @Override
     public ProductResponseDTO save(@NonNull ProductRequestDTO request) {
-        validationEnums(request);
+        validationProduct(request);
         Product product = createProduct(request);
 
         if (product.getType() == ProductType.SUBSCRIPTION) {
@@ -93,7 +92,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponseDTO update(@NonNull Long id, @NonNull ProductRequestDTO request) {
-        validationEnums(request);
+        validationProduct(request);
         Product product = updateProduct(id, request);
 
         if (product.getType() == ProductType.SUBSCRIPTION) {
@@ -301,7 +300,7 @@ public class ProductServiceImpl implements ProductService {
         return repository.save(product);
     }
 
-    private void validationEnums(@NonNull ProductRequestDTO request) {
+    private void validationProduct(@NonNull ProductRequestDTO request) {
 
         try {
             ProductType.valueOf(request.getType());
@@ -372,6 +371,7 @@ public class ProductServiceImpl implements ProductService {
 
         Product product = repository.findById(event.getOrder().getProduct().getId()).orElseThrow(() -> new ValidationException("Produto não encontrado"));
         event.getOrder().getProduct().setName(product.getName());
+        event.getOrder().getProduct().setMethod(product.getPaymentMethod());
 
         if (event.getOrder().getProduct().getType() == ProductType.SUBSCRIPTION) {
             if (event.getOrder().getProduct().getPlanId() == null) {
@@ -396,9 +396,9 @@ public class ProductServiceImpl implements ProductService {
         addHistory(event, "Produtos validados com sucesso");
     }
 
-    private void sendOrchestratorSaga(@NonNull OrderEventDTO event) {
+    private void sendSaga(@NonNull OrderEventDTO event) {
         String payload = jsonUtil.toJson(event);
-        producer.sendEvent(payload, orchestrator);
+        producer.sendEvent(payload, "orchestrator");
     }
 
 }

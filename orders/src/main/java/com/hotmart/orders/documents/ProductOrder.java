@@ -18,5 +18,6 @@ public class ProductOrder {
     private String name;
     private String type;
     private BigDecimal price;
+    private String method;
 
 }

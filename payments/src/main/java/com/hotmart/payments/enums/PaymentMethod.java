@@ -1,4 +1,4 @@
-package com.hotmart.products.enums;
+package com.hotmart.payments.enums;
 
 public enum PaymentMethod {
 
