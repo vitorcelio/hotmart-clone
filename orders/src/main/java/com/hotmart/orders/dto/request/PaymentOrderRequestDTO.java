@@ -18,13 +18,14 @@ public class PaymentOrderRequestDTO {
 
     @NotNull
     private String type;
+    private Integer installment;
+    private BigDecimal price;
+    private BigDecimal totalPrice;
     private String cardNumber;
     private String yearExpiry;
     private String monthExpiry;
     private String cardholderName;
-    private Integer installment;
-    private BigDecimal price;
-    private BigDecimal totalPrice;
+    private String cvv;
 
     public boolean validation() {
         if (type.equals("CREDIT_CARD")) {
@@ -40,6 +41,11 @@ public class PaymentOrderRequestDTO {
                 .installment(installment)
                 .price(price)
                 .totalPrice(totalPrice)
+                .cardNumber(cardNumber)
+                .yearExpiry(yearExpiry)
+                .monthExpiry(monthExpiry)
+                .cardholderName(cardholderName)
+                .cvv(cvv)
                 .build();
     }
 

@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -25,7 +26,7 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "integration_id", nullable = false)
+    @Column(name = "integration_id")
     private String integrationId;
 
     @Column(name = "order_id", nullable = false)
@@ -40,6 +41,12 @@ public class Payment {
     @Column(nullable = false)
     private BigDecimal amount;
 
+    @Column(name = "total_amount", nullable = false)
+    private BigDecimal totalAmount;
+
+    @ColumnDefault("0")
+    private Integer installments;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PaymentType type;
@@ -49,7 +56,6 @@ public class Payment {
     private PaymentStatus status;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private PaymentGateway gateway;
 
     @Column(name = "user_id", nullable = false)
@@ -57,6 +63,12 @@ public class Payment {
 
     @Enumerated(EnumType.STRING)
     private PeriodicitySubscription periodicity;
+
+    @Column(name = "product_id", nullable = false)
+    private Long productId;
+
+    @Column(name = "plan_id")
+    private Long planId;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -70,7 +82,6 @@ public class Payment {
         createdAt = now;
         updatedAt = now;
         status = PaymentStatus.PENDING;
-        gateway = PaymentGateway.ASAAS;
     }
 
     @PreUpdate

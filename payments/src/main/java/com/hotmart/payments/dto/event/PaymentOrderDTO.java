@@ -1,5 +1,6 @@
 package com.hotmart.payments.dto.event;
 
+import com.hotmart.payments.enums.PaymentType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,10 +14,16 @@ import java.math.BigDecimal;
 @Builder
 public class PaymentOrderDTO {
 
-    private String type;
+    private Long id;
+    private PaymentType type;
     private Integer installment;
     private String lastDigitsCardNumber;
     private BigDecimal price;
     private BigDecimal totalPrice;
+    private String cardNumber;
+    private String yearExpiry;
+    private String monthExpiry;
+    private String cardholderName;
+    private String cvv;
 
 }

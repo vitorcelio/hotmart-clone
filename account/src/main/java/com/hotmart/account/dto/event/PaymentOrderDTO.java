@@ -13,10 +13,16 @@ import java.math.BigDecimal;
 @Builder
 public class PaymentOrderDTO {
 
+    private Long id;
     private String type;
     private Integer installment;
     private String lastDigitsCardNumber;
     private BigDecimal price;
     private BigDecimal totalPrice;
+    private String cardNumber;
+    private String yearExpiry;
+    private String monthExpiry;
+    private String cardholderName;
+    private String cvv;
 
 }

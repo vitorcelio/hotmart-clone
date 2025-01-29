@@ -378,7 +378,8 @@ public class ProductServiceImpl implements ProductService {
                 throw new ValidationException("Plano deve ser informado");
             }
 
-            planRepository.findById(event.getOrder().getProduct().getPlanId()).orElseThrow(() -> new ValidationException("Plano não encontrado"));
+            Plan plan = planRepository.findById(event.getOrder().getProduct().getPlanId()).orElseThrow(() -> new ValidationException("Plano não encontrado"));
+            event.getOrder().getProduct().setPeriodicity(plan.getPeriodicity());
         }
 
 

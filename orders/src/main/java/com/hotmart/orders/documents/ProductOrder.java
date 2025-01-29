@@ -19,5 +19,6 @@ public class ProductOrder {
     private String type;
     private BigDecimal price;
     private String method;
+    private String periodicity;
 
 }

@@ -7,8 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,20 +19,22 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name = "integration_id", nullable = false)
+    @Column(name = "integration_id", unique = true)
     private String integrationId;
 
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id", nullable = false, unique = true)
     private Long userId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(name = "api_key", nullable = false)
     private String apiKey;
 
+    @Column(name = "wallet_id", unique = true)
+    private String walletId;
+
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private PaymentGateway gateway;
     
 }
