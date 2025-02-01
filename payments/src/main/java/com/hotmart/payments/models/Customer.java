@@ -19,8 +19,11 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name = "integration_id", unique = true)
-    private String integrationId;
+    @Column(name = "customer_integration_id", unique = true)
+    private String customerIntegrationId;
+
+    @Column(name = "subaccount_integration_id", unique = true)
+    private String subaccountIntegrationId;
 
     @Column(name = "user_id", nullable = false, unique = true)
     private Long userId;

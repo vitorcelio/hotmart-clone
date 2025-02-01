@@ -1,10 +1,6 @@
 package com.hotmart.payments.service.payment.impl;
 
-import com.asaas.docs.dto.response.CustomerResponseDTO;
-import com.hotmart.payments.dto.event.BuyerOrderDTO;
-import com.hotmart.payments.dto.event.OrderEventDTO;
-import com.hotmart.payments.dto.event.PaymentOrderDTO;
-import com.hotmart.payments.dto.event.ProductOrderDTO;
+import com.hotmart.payments.dto.event.*;
 import com.hotmart.payments.dto.response.PaymentResponseDTO;
 import com.hotmart.payments.enums.PaymentGateway;
 import com.hotmart.payments.enums.PaymentStatus;
@@ -26,10 +22,15 @@ import org.springframework.util.ObjectUtils;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.hotmart.payments.enums.SagaStatus.ROLLBACK;
+import static com.hotmart.payments.enums.SagaStatus.SUCCESS;
+
 @Slf4j
 @Service("MyPaymentService")
 @RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
+
+    private static final String CURRENT_SOURCE = "PAYMENT_SERVICE";
 
     private final PaymentRepository repository;
     private final CustomerRepository customerRepository;
@@ -41,12 +42,16 @@ public class PaymentServiceImpl implements PaymentService {
         try {
             validationPayment(event);
             Customer customer = createCustomer(event);
-            CustomerResponseDTO responseCustomer = customerIntegrationService.createCustomer(customer, event);
+            var responseCustomer = customerIntegrationService.createCustomer(customer, event);
             Payment payment = createPayment(event);
-            integrationService.createPayment(payment, responseCustomer.getId(), event);
+            integrationService.createPayment(payment, responseCustomer.getCustomerId(), event);
+            handleSuccess(event);
         } catch (Exception e) {
-
+            log.error("Erro ao processar o pagamento do cliente", e);
+            handleFail(event, e.getMessage());
         }
+
+        // envio para saga
     }
 
     @Override
@@ -128,5 +133,27 @@ public class PaymentServiceImpl implements PaymentService {
         return customerRepository.save(save);
     }
 
+    private void addHistory(@NonNull OrderEventDTO event, @NonNull String message) {
+        var history = HistoryDTO.builder()
+                .source(event.getSource())
+                .status(event.getStatus())
+                .message(message)
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        event.addHistory(history);
+    }
+
+    private void handleFail(@NonNull OrderEventDTO event, @NonNull String message) {
+        event.setStatus(ROLLBACK);
+        event.setSource(CURRENT_SOURCE);
+        addHistory(event, "Falha ao validar produtos: ".concat(message));
+    }
+
+    private void handleSuccess(@NonNull OrderEventDTO event) {
+        event.setStatus(SUCCESS);
+        event.setSource(CURRENT_SOURCE);
+        addHistory(event, "Produtos validados com sucesso");
+    }
 
 }
